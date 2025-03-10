@@ -128,21 +128,23 @@ export default function NavBarDesktop({items}: {
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
+            setScrolled(window.scrollY > 0);
         };
 
         window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
     }, []);
 
     return (
         <div className={styles.navbarWrapper} ref={navbarRef}>
             <motion.div initial={{y: -100}} animate={isInView ? {y: 0} : {y: -100}}
                         transition={{type: 'spring', stiffness: 120, damping: 20}}>
-                <nav className={clsx(styles.navbar, scrolled ? styles.scrolled : '')}>
-                    <div className={styles.navbarContainer}>
+                <nav className={clsx(styles.navbar, scrolled ? styles.scrolled : '')} style={{ height: '64px' }}>
+                    <div className={styles.navbarContainer} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div className={styles.avatarWrapper}>
-                            <EnhancedAvatar avatarSrc={websiteInfo.WEBSITE_LOGO}/>
+                            <EnhancedAvatar avatarSrc={websiteInfo.WEBSITE_LOGO} />
                         </div>
                         {isTitleVisible ? (
                             <motion.div initial={{y: 10, opacity: 0}}
@@ -228,7 +230,7 @@ export default function NavBarDesktop({items}: {
                             </div>
                         )}
 
-                        <div className={styles.navbarContent}>
+                        <div className={styles.navbarContent} style={{ marginLeft: '20px' }}>
                             <div className={styles.searchWrapper}>
                                 <motion.div whileHover={{scale: 1.1}} whileTap={{scale: 0.95}}>
                                     <div className={styles.search}>
@@ -238,15 +240,16 @@ export default function NavBarDesktop({items}: {
                                     </div>
                                 </motion.div>
                             </div>
-                            <div className={styles.githubWrapper}>
-                                <motion.div whileHover={{scale: 1.1}} whileTap={{scale: 0.95}}>
-                                    <a href={websiteInfo.AUTHOR_GITHUB} target="_blank"
-                                       rel="noopener noreferrer"
-                                       className={styles.githubLink}>
-                                        <GitHubLogoIcon/>
-                                    </a>
-                                </motion.div>
-                            </div>
+                            {/*    暂时用不着GitHub登录，所以注销了*/}
+                            {/*<div className={styles.githubWrapper}>*/}
+                            {/*    <motion.div whileHover={{scale: 1.1}} whileTap={{scale: 0.95}}>*/}
+                            {/*        <a href={websiteInfo.AUTHOR_GITHUB} target="_blank"*/}
+                            {/*           rel="noopener noreferrer"*/}
+                            {/*           className={styles.githubLink}>*/}
+                            {/*            <GitHubLogoIcon/>*/}
+                            {/*        </a>*/}
+                            {/*    </motion.div>*/}
+                            {/*</div>*/}
                             <div className={styles.themeToggleWrapper}>
                                 <motion.div whileHover={{scale: 1.1}} whileTap={{scale: 0.95}}>
                                     {mounted && (
@@ -308,8 +311,8 @@ export default function NavBarDesktop({items}: {
                                                     overflow: 'hidden',
                                                     borderRadius: '50%',
                                                 }}
-                                                    className={styles.loginButton}
-                                                    onClick={openLoginModal}>
+                                                className={styles.loginButton}
+                                                onClick={openLoginModal}>
                                             <UserRoundPlusIcon width={16} height={16}/>
                                         </Button>
                                     </motion.div>
@@ -322,6 +325,5 @@ export default function NavBarDesktop({items}: {
             <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal}/>
             <SearchModal open={isSearchVisible} setOpen={setIsSearchVisible}/>
         </div>
-    )
-        ;
+    );
 }
